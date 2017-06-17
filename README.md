@@ -1,24 +1,19 @@
-# README
+# Aggrecat
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## How to Develop
 
-Things you may want to cover:
+Create a [Twitter app](https://apps.twitter.com/).
 
-* Ruby version
+```bash
+bundle install
+rails db:migrate
+rake db:setup
+cp dotenv.sample .env
+```
 
-* System dependencies
+Modify .env with your Twitter app's credentials.
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+```bash
+bundle exec rails s
+open http://localhost:3000
+```

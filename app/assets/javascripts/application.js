@@ -10,6 +10,25 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require rails-ujs
-//= require turbolinks
-//= require_tree .
+//= require_self
+//= require react
+//= require react_ujs
+
+/* eslint-disable global-require */
+
+const isProduction = window.location.host.indexOf('herokuapp.com') > -1
+const isHttps = window.location.protocol === 'https:'
+if (isProduction && !isHttps) {
+  window.location.href = `https:${window.location.href.substring(window.location.protocol.length)}`
+} else {
+  window.React = global.React = require('react')
+
+  const Promise = require('promise-polyfill')
+
+  if (!window.Promise) {
+    window.Promise = Promise
+  }
+
+  require('whatwg-fetch')
+  require('./components')
+}

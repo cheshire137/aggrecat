@@ -13,8 +13,25 @@ export default class AggrecatAPI extends Fetcher {
     }
   }
 
+  getRedditActivity(user, category) {
+    let path = `/reddit-activity?user=${encodeURIComponent(user)}`
+    if (category) {
+      path += `&category=${encodeURIComponent(category)}`
+    }
+    return this.get(path, this.defaultHeaders).then(activity =>
+      activity.map(item => this.setTime(item))
+    )
+  }
+
   getTweets(user) {
     const path = `/tweets?user=${encodeURIComponent(user)}`
-    return this.get(path, this.defaultHeaders)
+    return this.get(path, this.defaultHeaders).then(tweets =>
+      tweets.map(tweet => this.setTime(tweet))
+    )
+  }
+
+  setTime(item) {
+    item.time = new Date(item.time)
+    return item
   }
 }

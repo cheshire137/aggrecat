@@ -4,38 +4,84 @@ import { Tweet } from 'react-twitter-widgets'
 import AggrecatAPI from '../models/aggrecat-api'
 
 import AccountsForm from './accounts-form.jsx'
+import RedditItem from './reddit-item.jsx'
 
 class ActivityFeed extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { tweets: [], twitterUser: 'cheshire137' }
+    this.state = {
+      allActivity: [],
+      tweets: [],
+      twitterUser: 'cheshire137',
+      redditActivity: [],
+      redditUser: 'cheshire137'
+    }
+    this.api = new AggrecatAPI()
   }
 
   componentDidMount() {
     if (this.state.twitterUser) {
       this.fetchTweets()
     }
+    if (this.state.redditUser) {
+      this.fetchRedditActivity()
+    }
   }
 
   onAccountsUpdate(accounts) {
-    this.setState({ twitterUser: accounts.twitterUser }, () => {
-      this.fetchTweets()
+    if (accounts.twitterUser) {
+      this.setState({ twitterUser: accounts.twitterUser }, () => {
+        this.fetchTweets()
+      })
+    }
+    if (accounts.redditUser) {
+      this.setState({ redditUser: accounts.redditUser }, () => {
+        this.fetchRedditActivity()
+      })
+    }
+  }
+
+  onRedditActivityLoaded(redditActivity) {
+    console.log('reddit', redditActivity.map(i => i.type).join(', '), redditActivity)
+    this.setState({ redditActivity }, () => {
+      this.combineActivity()
     })
   }
 
   onTweetsLoaded(tweets) {
-    this.setState({ tweets })
+    this.setState({ tweets }, () => {
+      this.combineActivity()
+    })
   }
 
-  fetchTweets(user) {
-    const api = new AggrecatAPI()
-    api.getTweets(this.state.twitterUser).
+  combineActivity() {
+    const { tweets, redditActivity } = this.state
+    const allActivity = tweets.concat(redditActivity)
+    if (tweets.length > 0 && redditActivity.length > 0) {
+      allActivity.sort((a, b) => {
+        if (a.time < b.time) {
+          return 1
+        }
+        return a.time > b.time ? -1 : 0
+      })
+    }
+    this.setState({ allActivity })
+  }
+
+  fetchRedditActivity() {
+    this.api.getRedditActivity(this.state.redditUser).
+      then(activity => this.onRedditActivityLoaded(activity)).
+      catch(err => console.error('failed to load Reddit activity', err))
+  }
+
+  fetchTweets() {
+    this.api.getTweets(this.state.twitterUser).
       then(tweets => this.onTweetsLoaded(tweets)).
       catch(err => console.error('failed to load Tweets', err))
   }
 
   render() {
-    const { tweets, twitterUser } = this.state
+    const { allActivity, twitterUser } = this.state
     return (
       <div>
         <AccountsForm
@@ -43,11 +89,27 @@ class ActivityFeed extends React.Component {
           onUpdate={accounts => this.onAccountsUpdate(accounts)}
         />
         <ul>
-          {tweets.map(tweet => (
-            <li key={tweet.id}>
-              <Tweet tweetId={tweet.id} />
-            </li>
-          ))}
+          {allActivity.map(item => {
+            if (item.source === 'twitter') {
+              return (
+                <li key={item.id}>
+                  <Tweet tweetId={item.id} />
+                </li>
+              )
+            }
+            if (item.source === 'reddit') {
+              return (
+                <li key={item.id}>
+                  <RedditItem item={item} />
+                </li>
+              )
+            }
+            return (
+              <li key={item.type}>
+                {item.type}
+              </li>
+            )
+          })}
         </ul>
       </div>
     )

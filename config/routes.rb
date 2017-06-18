@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   scope defaults: { format: :json }, path: "/api" do
     get '/tweets' => 'twitter#tweets', as: :tweets
+    get '/reddit-activity' => 'reddit#activity', as: :reddit_activity
   end
 
   root to: 'home#index'

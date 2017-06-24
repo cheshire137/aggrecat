@@ -94,29 +94,33 @@ class ActivityFeed extends React.Component {
           twitterUser={twitterUser}
           onUpdate={accounts => this.onAccountsUpdate(accounts)}
         />
-        <ul>
-          {allActivity.map(item => {
-            if (item.source === 'twitter') {
-              return (
-                <li key={item.id}>
-                  <Tweet tweetId={item.id} />
-                </li>
-              )
-            }
-            if (item.source === 'reddit') {
-              return (
-                <li key={item.id}>
-                  <RedditItem item={item} />
-                </li>
-              )
-            }
-            return (
-              <li key={item.type}>
-                {item.type}
-              </li>
-            )
-          })}
-        </ul>
+        <section className="section has-top-shadow">
+          <div className="container">
+            <div className="columns">
+              <div className="column is-8 is-offset-2">
+                <ul>
+                  {allActivity.map(item => {
+                    if (item.source === 'twitter') {
+                      return (
+                        <li key={item.id}>
+                          <Tweet tweetId={item.id} />
+                        </li>
+                      )
+                    }
+                    if (item.source === 'reddit') {
+                      return (
+                        <li key={item.id}>
+                          <RedditItem item={item} />
+                        </li>
+                      )
+                    }
+                    return <li key={item.type}>{item.type}</li>
+                  })}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     )
   }

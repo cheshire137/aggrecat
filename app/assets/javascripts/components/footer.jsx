@@ -1,9 +1,7 @@
-import PropTypes from 'prop-types'
-
-const Footer = function(props) {
+const Footer = function() {
   return (
-    <footer className="footer">
-      <div className="container">
+    <footer className="footer is-inset">
+      <div className="container has-text-centered">
         <a
           href="https://github.com/cheshire137/aggrecat"
           target="_blank"
@@ -12,9 +10,6 @@ const Footer = function(props) {
       </div>
     </footer>
   )
-}
-
-Footer.propTypes = {
 }
 
 export default Footer

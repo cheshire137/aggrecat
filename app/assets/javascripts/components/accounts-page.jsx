@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types'
+
 import LocalStorage from '../models/local-storage'
 
 import AccountsForm from './accounts-form.jsx'
@@ -15,6 +17,10 @@ class AccountsPage extends React.Component {
   onAccountsUpdate(accounts) {
     LocalStorage.set('twitter-user', accounts.twitterUser)
     LocalStorage.set('reddit-user', accounts.redditUser)
+
+    if (accounts.twitterUser || accounts.redditUser) {
+      this.props.router.push('/')
+    }
   }
 
   render() {
@@ -30,6 +36,10 @@ class AccountsPage extends React.Component {
       </div>
     )
   }
+}
+
+AccountsPage.propTypes = {
+  router: PropTypes.object.isRequired
 }
 
 export default AccountsPage

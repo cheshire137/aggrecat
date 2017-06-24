@@ -18,7 +18,7 @@ class RedditLink extends React.Component {
             <a className="reddit-link" href={url}>{title}</a>
             <a className="reddit-comments-link" href={commentsURL}>Comments</a>
           </div>
-          <p>
+          <p className="reddit-meta clearfix">
             <SubredditLink subreddit={subreddit} />
             <RedditUserLink user={user} />
             <span className="comment-count">{commentCount}</span>

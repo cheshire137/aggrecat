@@ -13,7 +13,7 @@ class RedditComment extends React.Component {
           <div className="content">
             <blockquote className="reddit-comment-body">{body}</blockquote>
           </div>
-          <p>
+          <p className="reddit-meta clearfix">
             <SubredditLink subreddit={subreddit} />
             <RedditUserLink user={user} />
             <Timestamp time={time} />

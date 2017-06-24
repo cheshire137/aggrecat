@@ -1,3 +1,9 @@
 .section.is-small {
   padding: 1rem 1.5rem;
 }
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}

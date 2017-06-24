@@ -1,18 +1,24 @@
 .reddit-comment {
-
+  margin-bottom: 10px;
 }
 
 .reddit-user {
-
+  float: right;
+  font-size: 14px;
+  color: #888;
+  font-weight: bold;
 }
 
 .time {
   font-size: 14px;
   color: rgb(105, 120, 130);
+  display: block;
 }
 
 .subreddit {
-
+  color: #888;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 .reddit-comment-body {
@@ -20,7 +26,7 @@
 }
 
 .reddit-link-container {
-
+  margin-bottom: 10px;
 }
 
 .reddit-link {
@@ -36,5 +42,9 @@
 }
 
 .nsfw-label {
+
+}
+
+.reddit-meta {
 
 }

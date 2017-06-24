@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 
 import RedditUserLink from './reddit-user-link.jsx'
 import SubredditLink from './subreddit-link.jsx'
+import Timestamp from './timestamp.jsx'
 
 class RedditComment extends React.Component {
   render() {
@@ -15,7 +16,7 @@ class RedditComment extends React.Component {
           <p>
             <SubredditLink subreddit={subreddit} />
             <RedditUserLink user={user} />
-            <time className="time">{time.toLocaleDateString()}</time>
+            <Timestamp time={time} />
           </p>
         </div>
       </div>

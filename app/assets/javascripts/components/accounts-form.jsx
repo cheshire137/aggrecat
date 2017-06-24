@@ -49,7 +49,10 @@ class AccountsForm extends React.Component {
         <div className="container">
           <form onSubmit={e => this.onSubmit(e)}>
             <div className="columns">
-              <div className="column is-6 is-offset-3">
+              <div className="content column is-6 is-offset-3">
+                <p className="has-text-centered">
+                  Enter user names to build an activity feed:
+                </p>
                 <div className="field is-horizontal">
                   <div className="field-label is-normal">
                     <label
@@ -91,6 +94,7 @@ class AccountsForm extends React.Component {
                           onChange={e => this.onTwitterUpdate(e)}
                         />
                       </div>
+                      <p className="help">No leading <code>@</code>, please</p>
                     </div>
                   </div>
                 </div>

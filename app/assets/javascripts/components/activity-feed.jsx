@@ -5,6 +5,7 @@ import { Tweet } from 'react-twitter-widgets'
 import AggrecatAPI from '../models/aggrecat-api'
 import LocalStorage from '../models/local-storage'
 
+import ActivitySummary from './activity-summary.jsx'
 import Header from './header.jsx'
 import RedditItem from './reddit-item.jsx'
 import YoutubeVideo from './youtube-video.jsx'
@@ -90,15 +91,20 @@ class ActivityFeed extends React.Component {
   }
 
   render() {
-    const { allActivity } = this.state
+    const { allActivity, redditUser, twitterUser, youtubeUser } = this.state
     return (
       <div>
         <Header title="Activity" />
         <section className="section">
           <div className="container">
             <div className="columns">
-              <div className="column is-8 is-offset-2">
-                <ul>
+              <div className="column content is-8 is-offset-2">
+                <ActivitySummary
+                  redditUser={redditUser}
+                  twitterUser={twitterUser}
+                  youtubeUser={youtubeUser}
+                />
+                <ul className="activity-list">
                   {allActivity.map(item => {
                     if (item.source === 'twitter') {
                       return (

@@ -19,18 +19,18 @@ export default class AggrecatAPI extends Fetcher {
       path += `&category=${encodeURIComponent(category)}`
     }
     return this.get(path, this.defaultHeaders).then(activity =>
-      activity.map(item => this.setTime(item))
+      activity.map(item => AggrecatAPI.setTime(item))
     )
   }
 
   getTweets(user) {
     const path = `/tweets?user=${encodeURIComponent(user)}`
     return this.get(path, this.defaultHeaders).then(tweets =>
-      tweets.map(tweet => this.setTime(tweet))
+      tweets.map(tweet => AggrecatAPI.setTime(tweet))
     )
   }
 
-  setTime(item) {
+  static setTime(item) {
     item.time = new Date(item.time)
     return item
   }

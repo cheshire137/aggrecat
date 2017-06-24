@@ -5,6 +5,7 @@ import AggrecatAPI from '../models/aggrecat-api'
 import LocalStorage from '../models/local-storage'
 
 import AccountsForm from './accounts-form.jsx'
+import Header from './header.jsx'
 import RedditItem from './reddit-item.jsx'
 
 class ActivityFeed extends React.Component {
@@ -87,6 +88,7 @@ class ActivityFeed extends React.Component {
     const { allActivity, redditUser, twitterUser } = this.state
     return (
       <div>
+        <Header title="Activity" />
         <AccountsForm
           redditUser={redditUser}
           twitterUser={twitterUser}

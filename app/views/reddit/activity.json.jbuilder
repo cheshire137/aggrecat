@@ -5,13 +5,16 @@ json.array! @activity do |item|
     json.user item.author
     json.body item.body
     json.subreddit item.subreddit
+    json.score item.score
     json.time item.posted_at
+    json.url "#{item.attributes[:link_permalink]}#{item.attributes[:id]}"
     json.id "comment-#{item.posted_at.to_i}"
   elsif item.is_a? RedditKit::Link
     json.type 'link'
     json.title item.title
     json.user item.author
     json.domain item.domain
+    json.score item.score
     json.commentCount item.num_comments
     json.url item.url
     json.commentsURL item.permalink

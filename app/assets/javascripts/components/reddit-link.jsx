@@ -16,13 +16,17 @@ class RedditLink extends React.Component {
               <acronym title="Not Safe for Work" className="nsfw-label">NSFW</acronym>
             ) : ''}
             <a className="reddit-link" href={url}>{title}</a>
-            <a className="reddit-comments-link" href={commentsURL}>Comments</a>
+            <a
+              className="reddit-comments-link"
+              href={commentsURL}
+            >Comments (<span className="comment-count">{commentCount}</span>)</a>
           </div>
           <p className="reddit-meta clearfix">
             <SubredditLink subreddit={subreddit} />
             <RedditUserLink user={user} />
-            <span className="comment-count">{commentCount}</span>
-            <Timestamp time={time} />
+            <a
+              href={commentsURL}
+            ><Timestamp time={time} /></a>
           </p>
         </div>
       </div>

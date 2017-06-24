@@ -30,6 +30,13 @@ export default class AggrecatAPI extends Fetcher {
     )
   }
 
+  getYoutubeVideos(user) {
+    const path = `/youtube-videos?user=${encodeURIComponent(user)}`
+    return this.get(path, this.defaultHeaders).then(videos =>
+      videos.map(video => AggrecatAPI.setTime(video))
+    )
+  }
+
   static setTime(item) {
     item.time = new Date(item.time)
     return item

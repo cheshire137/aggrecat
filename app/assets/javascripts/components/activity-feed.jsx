@@ -7,6 +7,7 @@ import LocalStorage from '../models/local-storage'
 
 import Header from './header.jsx'
 import RedditItem from './reddit-item.jsx'
+import YoutubeVideo from './youtube-video.jsx'
 
 class ActivityFeed extends React.Component {
   constructor(props) {
@@ -16,20 +17,25 @@ class ActivityFeed extends React.Component {
       tweets: [],
       twitterUser: LocalStorage.get('twitter-user'),
       redditActivity: [],
-      redditUser: LocalStorage.get('reddit-user')
+      redditUser: LocalStorage.get('reddit-user'),
+      youtubeUser: LocalStorage.get('youtube-user'),
+      youtubeVideos: []
     }
     this.api = new AggrecatAPI()
   }
 
   componentDidMount() {
-    const { redditUser, twitterUser } = this.state
+    const { redditUser, twitterUser, youtubeUser } = this.state
     if (twitterUser) {
       this.fetchTweets()
     }
     if (redditUser) {
       this.fetchRedditActivity()
     }
-    if (!twitterUser && !redditUser) {
+    if (youtubeUser) {
+      this.fetchYoutubeVideos()
+    }
+    if (!twitterUser && !redditUser && !youtubeUser) {
       this.props.router.push('/accounts')
     }
   }
@@ -46,17 +52,23 @@ class ActivityFeed extends React.Component {
     })
   }
 
+  onYoutubeVideosLoaded(youtubeVideos) {
+    console.log('youtube', youtubeVideos)
+    this.setState({ youtubeVideos }, () => {
+      this.combineActivity()
+    })
+  }
+
   combineActivity() {
-    const { tweets, redditActivity } = this.state
-    const allActivity = tweets.concat(redditActivity)
-    if (tweets.length > 0 && redditActivity.length > 0) {
-      allActivity.sort((a, b) => {
-        if (a.time < b.time) {
-          return 1
-        }
-        return a.time > b.time ? -1 : 0
-      })
-    }
+    const { tweets, redditActivity, youtubeVideos } = this.state
+    const allActivity = tweets.concat(redditActivity).
+      concat(youtubeVideos)
+    allActivity.sort((a, b) => {
+      if (a.time < b.time) {
+        return 1
+      }
+      return a.time > b.time ? -1 : 0
+    })
     this.setState({ allActivity })
   }
 
@@ -70,6 +82,12 @@ class ActivityFeed extends React.Component {
     this.api.getTweets(this.state.twitterUser).
       then(tweets => this.onTweetsLoaded(tweets)).
       catch(err => console.error('failed to load Tweets', err))
+  }
+
+  fetchYoutubeVideos() {
+    this.api.getYoutubeVideos(this.state.youtubeUser).
+      then(videos => this.onYoutubeVideosLoaded(videos)).
+      catch(err => console.error('failed to load YouTube videos', err))
   }
 
   render() {
@@ -94,6 +112,13 @@ class ActivityFeed extends React.Component {
                       return (
                         <li key={item.id}>
                           <RedditItem item={item} />
+                        </li>
+                      )
+                    }
+                    if (item.source === 'youtube') {
+                      return (
+                        <li key={item.id}>
+                          <YoutubeVideo {...item} />
                         </li>
                       )
                     }

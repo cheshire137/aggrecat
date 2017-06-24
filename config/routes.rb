@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   scope defaults: { format: :json }, path: "/api" do
     get '/tweets' => 'twitter#tweets', as: :tweets
+    get '/youtube-videos' => 'youtube#videos', as: :youtube_videos
     get '/reddit-activity' => 'reddit#activity', as: :reddit_activity
   end
 

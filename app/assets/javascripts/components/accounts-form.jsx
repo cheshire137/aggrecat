@@ -5,25 +5,28 @@ class AccountsForm extends React.Component {
     super(props)
     this.state = {
       twitterUser: props.twitterUser || '',
-      redditUser: props.redditUser || ''
+      redditUser: props.redditUser || '',
+      youtubeUser: props.youtubeUser || ''
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
       twitterUser: nextProps.twitterUser || '',
-      redditUser: nextProps.redditUser || ''
+      redditUser: nextProps.redditUser || '',
+      youtubeUser: nextProps.youtubeUser || ''
     })
   }
 
   onSubmit(event) {
     event.preventDefault()
 
-    const { redditUser, twitterUser } = this.state
+    const { redditUser, twitterUser, youtubeUser } = this.state
 
     this.props.onUpdate({
       twitterUser: twitterUser.replace(/^@/, ''),
-      redditUser
+      redditUser,
+      youtubeUser
     })
   }
 
@@ -35,8 +38,12 @@ class AccountsForm extends React.Component {
     this.setState({ twitterUser: event.target.value })
   }
 
+  onYoutubeUpdate(event) {
+    this.setState({ youtubeUser: event.target.value })
+  }
+
   render() {
-    const { redditUser, twitterUser } = this.state
+    const { redditUser, twitterUser, youtubeUser } = this.state
     return (
       <section className="section">
         <div className="container">
@@ -88,6 +95,28 @@ class AccountsForm extends React.Component {
                   </div>
                 </div>
                 <div className="field is-horizontal">
+                  <div className="field-label is-normal">
+                    <label
+                      htmlFor="youtube_user"
+                      className="label"
+                    >YouTube</label>
+                  </div>
+                  <div className="field-body">
+                    <div className="field">
+                      <div className="control">
+                        <input
+                          className="input"
+                          type="text"
+                          placeholder="YouTube user"
+                          id="youtube_user"
+                          value={youtubeUser}
+                          onChange={e => this.onYoutubeUpdate(e)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="field is-horizontal">
                   <div className="field-label" />
                   <div className="field-body">
                     <div className="field">
@@ -111,7 +140,8 @@ class AccountsForm extends React.Component {
 AccountsForm.propTypes = {
   redditUser: PropTypes.string,
   twitterUser: PropTypes.string,
-  onUpdate: PropTypes.func.isRequired
+  onUpdate: PropTypes.func.isRequired,
+  youtubeUser: PropTypes.string
 }
 
 export default AccountsForm

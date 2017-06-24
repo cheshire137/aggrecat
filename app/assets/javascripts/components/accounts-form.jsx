@@ -38,7 +38,7 @@ class AccountsForm extends React.Component {
   render() {
     const { redditUser, twitterUser } = this.state
     return (
-      <section className="section is-subtle is-inset is-small">
+      <section className="section">
         <div className="container">
           <form onSubmit={e => this.onSubmit(e)}>
             <div className="columns">

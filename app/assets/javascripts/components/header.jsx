@@ -10,9 +10,14 @@ const Header = function(props) {
             className="nav-item is-brand"
             href="/"
           >&gt;^..^&lt; Aggrecat</a>
-          {title ? (
-            <span className="nav-item">{title}</span>
-          ) : ''}
+          <a
+            href="/"
+            className={`nav-item ${title === 'Activity' ? 'is-active' : ''}`}
+          >Activity</a>
+          <a
+            href="/accounts"
+            className={`nav-item ${title === 'Accounts' ? 'is-active' : ''}`}
+          >Accounts</a>
         </div>
       </nav>
     </div>

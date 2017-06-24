@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
+
 import { Tweet } from 'react-twitter-widgets'
 
 import AggrecatAPI from '../models/aggrecat-api'
 import LocalStorage from '../models/local-storage'
 
-import AccountsForm from './accounts-form.jsx'
 import Header from './header.jsx'
 import RedditItem from './reddit-item.jsx'
 
@@ -29,20 +29,8 @@ class ActivityFeed extends React.Component {
     if (redditUser) {
       this.fetchRedditActivity()
     }
-  }
-
-  onAccountsUpdate(accounts) {
-    if (accounts.twitterUser) {
-      this.setState({ twitterUser: accounts.twitterUser }, () => {
-        LocalStorage.set('twitter-user', accounts.twitterUser)
-        this.fetchTweets()
-      })
-    }
-    if (accounts.redditUser) {
-      this.setState({ redditUser: accounts.redditUser }, () => {
-        LocalStorage.set('reddit-user', accounts.redditUser)
-        this.fetchRedditActivity()
-      })
+    if (!twitterUser && !redditUser) {
+      this.props.router.push('/accounts')
     }
   }
 
@@ -85,16 +73,11 @@ class ActivityFeed extends React.Component {
   }
 
   render() {
-    const { allActivity, redditUser, twitterUser } = this.state
+    const { allActivity } = this.state
     return (
       <div>
         <Header title="Activity" />
-        <AccountsForm
-          redditUser={redditUser}
-          twitterUser={twitterUser}
-          onUpdate={accounts => this.onAccountsUpdate(accounts)}
-        />
-        <section className="section has-top-shadow">
+        <section className="section">
           <div className="container">
             <div className="columns">
               <div className="column is-8 is-offset-2">
@@ -127,6 +110,7 @@ class ActivityFeed extends React.Component {
 }
 
 ActivityFeed.propTypes = {
+  router: PropTypes.object.isRequired
 }
 
 export default ActivityFeed

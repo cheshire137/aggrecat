@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import { Tweet } from 'react-twitter-widgets'
 
 import AggrecatAPI from '../models/aggrecat-api'
+import LocalStorage from '../models/local-storage'
 
 import AccountsForm from './accounts-form.jsx'
 import RedditItem from './reddit-item.jsx'
@@ -12,9 +13,9 @@ class ActivityFeed extends React.Component {
     this.state = {
       allActivity: [],
       tweets: [],
-      twitterUser: 'cheshire137',
+      twitterUser: LocalStorage.get('twitter-user'),
       redditActivity: [],
-      redditUser: 'cheshire137'
+      redditUser: LocalStorage.get('reddit-user')
     }
     this.api = new AggrecatAPI()
   }
@@ -32,11 +33,13 @@ class ActivityFeed extends React.Component {
   onAccountsUpdate(accounts) {
     if (accounts.twitterUser) {
       this.setState({ twitterUser: accounts.twitterUser }, () => {
+        LocalStorage.set('twitter-user', accounts.twitterUser)
         this.fetchTweets()
       })
     }
     if (accounts.redditUser) {
       this.setState({ redditUser: accounts.redditUser }, () => {
+        LocalStorage.set('reddit-user', accounts.redditUser)
         this.fetchRedditActivity()
       })
     }

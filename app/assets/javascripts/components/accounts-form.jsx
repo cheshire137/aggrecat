@@ -4,15 +4,15 @@ class AccountsForm extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      twitterUser: props.twitterUser,
-      redditUser: props.redditUser
+      twitterUser: props.twitterUser || '',
+      redditUser: props.redditUser || ''
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      twitterUser: nextProps.twitterUser,
-      redditUser: nextProps.redditUser
+      twitterUser: nextProps.twitterUser || '',
+      redditUser: nextProps.redditUser || ''
     })
   }
 
@@ -21,7 +21,10 @@ class AccountsForm extends React.Component {
 
     const { redditUser, twitterUser } = this.state
 
-    this.props.onUpdate({ twitterUser, redditUser })
+    this.props.onUpdate({
+      twitterUser: twitterUser.replace(/^@/, ''),
+      redditUser
+    })
   }
 
   onRedditUpdate(event) {
@@ -50,6 +53,7 @@ class AccountsForm extends React.Component {
                   <input
                     className="input"
                     type="text"
+                    placeholder="Reddit user"
                     id="reddit_user"
                     value={redditUser}
                     onChange={e => this.onRedditUpdate(e)}
@@ -71,6 +75,7 @@ class AccountsForm extends React.Component {
                   <input
                     className="input"
                     type="text"
+                    placeholder="Twitter user"
                     id="twitter_user"
                     value={twitterUser}
                     onChange={e => this.onTwitterUpdate(e)}

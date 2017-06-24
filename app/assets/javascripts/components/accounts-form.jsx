@@ -3,18 +3,29 @@ import PropTypes from 'prop-types'
 class AccountsForm extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { twitterUser: props.twitterUser }
+    this.state = {
+      twitterUser: props.twitterUser,
+      redditUser: props.redditUser
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({ twitterUser: nextProps.twitterUser })
+    this.setState({
+      twitterUser: nextProps.twitterUser,
+      redditUser: nextProps.redditUser
+    })
   }
 
   onSubmit(event) {
     event.preventDefault()
-    this.props.onUpdate({
-      twitterUser: this.state.twitterUser
-    })
+
+    const { redditUser, twitterUser } = this.state
+
+    this.props.onUpdate({ twitterUser, redditUser })
+  }
+
+  onRedditUpdate(event) {
+    this.setState({ redditUser: event.target.value })
   }
 
   onTwitterUpdate(event) {
@@ -22,10 +33,31 @@ class AccountsForm extends React.Component {
   }
 
   render() {
-    const { twitterUser } = this.state
+    const { redditUser, twitterUser } = this.state
     return (
       <section className="section">
         <form onSubmit={e => this.onSubmit(e)}>
+          <div className="field is-horizontal">
+            <div className="field-label is-normal">
+              <label
+                htmlFor="reddit_user"
+                className="label"
+              >Reddit</label>
+            </div>
+            <div className="field-body">
+              <div className="field">
+                <div className="control">
+                  <input
+                    className="input"
+                    type="text"
+                    id="reddit_user"
+                    value={redditUser}
+                    onChange={e => this.onRedditUpdate(e)}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
           <div className="field is-horizontal">
             <div className="field-label is-normal">
               <label
@@ -66,6 +98,7 @@ class AccountsForm extends React.Component {
 }
 
 AccountsForm.propTypes = {
+  redditUser: PropTypes.string,
   twitterUser: PropTypes.string,
   onUpdate: PropTypes.func.isRequired
 }

@@ -20,10 +20,11 @@ class ActivityFeed extends React.Component {
   }
 
   componentDidMount() {
-    if (this.state.twitterUser) {
+    const { redditUser, twitterUser } = this.state
+    if (twitterUser) {
       this.fetchTweets()
     }
-    if (this.state.redditUser) {
+    if (redditUser) {
       this.fetchRedditActivity()
     }
   }
@@ -42,7 +43,6 @@ class ActivityFeed extends React.Component {
   }
 
   onRedditActivityLoaded(redditActivity) {
-    console.log('reddit', redditActivity.map(i => i.type).join(', '), redditActivity)
     this.setState({ redditActivity }, () => {
       this.combineActivity()
     })
@@ -81,10 +81,11 @@ class ActivityFeed extends React.Component {
   }
 
   render() {
-    const { allActivity, twitterUser } = this.state
+    const { allActivity, redditUser, twitterUser } = this.state
     return (
       <div>
         <AccountsForm
+          redditUser={redditUser}
           twitterUser={twitterUser}
           onUpdate={accounts => this.onAccountsUpdate(accounts)}
         />

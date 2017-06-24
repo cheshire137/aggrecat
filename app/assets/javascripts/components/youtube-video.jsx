@@ -16,9 +16,11 @@ class YoutubeVideo extends React.Component {
               frameBorder="0"
               allowFullScreen
             />
-            <p
-              className="youtube-description"
-            >{description}</p>
+            {description && description.length > 0 ? (
+              <p
+                className="youtube-description"
+              >{description}</p>
+            ) : ''}
           </div>
           <a
             title={title}

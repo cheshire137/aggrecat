@@ -1,5 +1,7 @@
 # Aggrecat
 
+Build your own activity feed from different social media sites.
+
 ## How to Develop
 
 Create a [Twitter app](https://apps.twitter.com/).

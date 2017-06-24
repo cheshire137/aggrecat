@@ -13,15 +13,6 @@ class YoutubeApi
     items_if_success(response)
   end
 
-  def playlist_items(playlist_id)
-    response = self.class.get('/playlistItems', query: {
-      part: 'snippet,contentDetails',
-      key: ENV['GOOGLE_API_KEY'],
-      playlistId: playlist_id
-    })
-    items_if_success(response)
-  end
-
   def channel_videos(channel_id, max_results: 25)
     response = self.class.get('/search', query: {
       part: 'snippet',

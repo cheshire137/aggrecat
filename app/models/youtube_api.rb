@@ -13,14 +13,16 @@ class YoutubeApi
     items_if_success(response)
   end
 
-  def channel_videos(channel_id, max_results: 25)
-    response = self.class.get('/search', query: {
+  def channel_videos(channel_id, max_results: 25, after: nil)
+    params = {
       part: 'snippet',
       key: ENV['GOOGLE_API_KEY'],
       order: 'date',
       channelId: channel_id,
       maxResults: max_results
-    })
+    }
+    params[:publishedAfter] = after.rfc3339 if after
+    response = self.class.get('/search', query: params)
     items_if_success(response)
   end
 

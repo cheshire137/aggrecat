@@ -1,5 +1,8 @@
-.reddit-comment {
+.reddit-container {
   margin-bottom: 10px;
+}
+
+.reddit-comment {
 }
 
 .reddit-user {
@@ -9,10 +12,13 @@
   font-weight: bold;
 }
 
+.reddit-permalink {
+  display: block;
+}
+
 .time {
   font-size: 14px;
   color: rgb(105, 120, 130);
-  display: block;
 }
 
 .subreddit {
@@ -26,15 +32,18 @@
 }
 
 .reddit-link-container {
-  margin-bottom: 10px;
 }
 
 .reddit-link {
-
+  font-weight: bold;
+  font-size: 1.1rem;
+  display: block;
 }
 
 .reddit-comments-link {
-
+  color: #888;
+  font-size: 14px;
+  float: right;
 }
 
 .comment-count {
@@ -46,5 +55,9 @@
 }
 
 .reddit-meta {
+
+}
+
+.reddit-self-text {
 
 }

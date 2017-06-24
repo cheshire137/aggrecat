@@ -15,6 +15,8 @@ json.array! @activity do |item|
     json.user item.author
     json.domain item.domain
     json.score item.score
+    json.isSelfPost item.self_post?
+    json.selfText item.selftext
     json.commentCount item.num_comments
     json.url item.url
     json.commentsURL item.permalink

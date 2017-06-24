@@ -53,7 +53,6 @@ class ActivityFeed extends React.Component {
   }
 
   onYoutubeVideosLoaded(youtubeVideos) {
-    console.log('youtube', youtubeVideos)
     this.setState({ youtubeVideos }, () => {
       this.combineActivity()
     })
@@ -103,21 +102,21 @@ class ActivityFeed extends React.Component {
                   {allActivity.map(item => {
                     if (item.source === 'twitter') {
                       return (
-                        <li key={item.id}>
+                        <li className="tweet-container" key={item.id}>
                           <Tweet tweetId={item.id} />
                         </li>
                       )
                     }
                     if (item.source === 'reddit') {
                       return (
-                        <li key={item.id}>
+                        <li className="reddit-container" key={item.id}>
                           <RedditItem item={item} />
                         </li>
                       )
                     }
                     if (item.source === 'youtube') {
                       return (
-                        <li key={item.id}>
+                        <li className="youtube-container" key={item.id}>
                           <YoutubeVideo {...item} />
                         </li>
                       )

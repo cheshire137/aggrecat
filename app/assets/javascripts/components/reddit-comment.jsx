@@ -17,6 +17,7 @@ class RedditComment extends React.Component {
             <SubredditLink subreddit={subreddit} />
             <RedditUserLink user={user} />
             <a
+              className="reddit-permalink"
               href={url}
             ><Timestamp time={time} /></a>
           </p>

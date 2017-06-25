@@ -5,3 +5,26 @@
 .github-container {
   margin-bottom: 10px;
 }
+
+.git-sha {
+  color: #888;
+}
+
+.git-commit-link {
+  color: #444;
+  font-size: 15px;
+  text-decoration: underline;
+
+  &:hover, &:focus {
+    text-decoration: none;
+  }
+}
+
+.github-login {
+  font-weight: bold;
+  color: inherit;
+
+  &:hover, &:focus {
+    text-decoration: underline;
+  }
+}

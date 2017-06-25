@@ -6,13 +6,18 @@ json.array! @events do |event|
 
   if event['repo']
     json.repo event['repo']['name']
+    json.repoUrl "https://github.com/#{event['repo']['name']}"
   end
 
   if event['type'] == 'PushEvent'
-    json.url "https://github.com/#{event['repo']['name']}"
+    json.login event['actor']['login']
+    json.userUrl "https://github.com/#{event['actor']['login']}"
     json.commitCount event['payload']['size']
-    json.commitMessages event['payload']['commits'].map do |commit|
-      commit['message']
+    json.commits event['payload']['commits'] do |commit|
+      json.message commit['message']
+      json.sha commit['sha']
+      json.url "https://github.com/#{event['repo']['name']}/commit/#{commit['sha']}"
+      json.shortSha commit['sha'][0...7]
     end
 
   elsif event['type'] == 'CreateEvent'
@@ -28,11 +33,9 @@ json.array! @events do |event|
 
   elsif event['type'] == 'ForkEvent'
     json.url event['payload']['forkee']['html_url']
-    json.sourceUrl "https://github.com/#{event['repo']['name']}"
 
   elsif event['type'] == 'WatchEvent'
     json.action event['payload']['action']
-    json.url "https://github.com/#{event['repo']['name']}"
 
   elsif event['type'] == 'IssueCommentEvent'
     json.url event['payload']['issue']['html_url']

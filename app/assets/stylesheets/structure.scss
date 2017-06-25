@@ -9,11 +9,24 @@
 }
 
 .layout-container {
-  display: flex;
+  @include display-flex;
   min-height: 100vh;
-  flex-direction: column;
+  @include flex-direction(column);
 }
 
 .layout-children-container {
-  flex: 1 0 auto;
+  @include flex(1 0 auto);
+}
+
+.activity-source-form {
+  @include display-flex;
+  @include justify-content(center);
+}
+
+.checkbox + .checkbox {
+  margin-left: 1em;
+}
+
+.checkbox input {
+  margin-right: 3px;
 }

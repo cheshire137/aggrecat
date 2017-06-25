@@ -24,7 +24,8 @@ class ActivityFeed extends React.Component {
       redditActivity: [],
       redditUser: LocalStorage.get('reddit-user'),
       youtubeUser: LocalStorage.get('youtube-user'),
-      youtubeVideos: []
+      youtubeVideos: [],
+      enabledSources: ['Twitch', 'Reddit', 'YouTube', 'Twitter']
     }
     this.api = new AggrecatAPI()
   }
@@ -55,6 +56,19 @@ class ActivityFeed extends React.Component {
     })
   }
 
+  onToggleSource(source, enabled) {
+    const sources = this.state.enabledSources.slice(0)
+    const index = sources.indexOf(source)
+    if (enabled && index < 0) {
+      sources.push(source)
+    } else if (!enabled && index > -1) {
+      delete sources[index]
+    }
+    this.setState({ enabledSources: sources }, () => {
+      this.combineActivity()
+    })
+  }
+
   onTweetsLoaded(tweets) {
     this.setState({ tweets }, () => {
       this.combineActivity()
@@ -78,9 +92,20 @@ class ActivityFeed extends React.Component {
 
   combineActivity() {
     const { tweets, redditActivity, twitchVideos,
-            youtubeVideos } = this.state
-    const allActivity = tweets.concat(redditActivity).
-      concat(youtubeVideos).concat(twitchVideos)
+            youtubeVideos, enabledSources } = this.state
+    let allActivity = []
+    if (enabledSources.indexOf('YouTube') > -1) {
+      allActivity = allActivity.concat(youtubeVideos)
+    }
+    if (enabledSources.indexOf('Reddit') > -1) {
+      allActivity = allActivity.concat(redditActivity)
+    }
+    if (enabledSources.indexOf('Twitter') > -1) {
+      allActivity = allActivity.concat(tweets)
+    }
+    if (enabledSources.indexOf('Twitch') > -1) {
+      allActivity = allActivity.concat(twitchVideos)
+    }
     allActivity.sort((a, b) => {
       if (a.time < b.time) {
         return 1
@@ -116,7 +141,7 @@ class ActivityFeed extends React.Component {
 
   render() {
     const { allActivity, redditUser, twitterUser, twitchUser,
-            youtubeUser, twitchChannel } = this.state
+            youtubeUser, twitchChannel, enabledSources } = this.state
     return (
       <div>
         <Header title="Activity" />
@@ -129,6 +154,8 @@ class ActivityFeed extends React.Component {
                   twitterUser={twitterUser}
                   youtubeUser={youtubeUser}
                   twitchUser={twitchUser}
+                  enabledSources={enabledSources}
+                  onToggleSource={(s, e) => this.onToggleSource(s, e)}
                 />
                 <ul className="activity-list">
                   {allActivity.map(item => {

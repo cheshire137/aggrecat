@@ -1,11 +1,15 @@
 import PropTypes from 'prop-types'
 
-class GithubEvent extends React.Component {
-  render() {
-    const { item } = this.props
+import GithubWatchEvent from './github-watch-event.jsx'
 
-    return <p>{item.type}</p>
+const GithubEvent = function(props) {
+  const { item } = props
+
+  if (item.type === 'WatchEvent') {
+    return <GithubWatchEvent {...item} />
   }
+
+  return <p>{item.type}</p>
 }
 
 GithubEvent.propTypes = {

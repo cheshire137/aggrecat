@@ -13,6 +13,13 @@ export default class AggrecatAPI extends Fetcher {
     }
   }
 
+  getGithubEvents(user) {
+    const path = `/github-events?user=${encodeURIComponent(user)}`
+    return this.get(path, this.defaultHeaders).then(events =>
+      events.map(event => AggrecatAPI.setTime(event))
+    )
+  }
+
   getRedditActivity(user, category) {
     let path = `/reddit-activity?user=${encodeURIComponent(user)}`
     if (category) {

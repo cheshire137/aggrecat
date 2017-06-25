@@ -4,14 +4,17 @@ json.array! @events do |event|
   json.time event['created_at']
   json.type event['type']
 
+  if event['actor']
+    json.login event['actor']['login']
+    json.userUrl "https://github.com/#{event['actor']['login']}"
+  end
+
   if event['repo']
     json.repo event['repo']['name']
     json.repoUrl "https://github.com/#{event['repo']['name']}"
   end
 
   if event['type'] == 'PushEvent'
-    json.login event['actor']['login']
-    json.userUrl "https://github.com/#{event['actor']['login']}"
     json.commitCount event['payload']['size']
     json.commits event['payload']['commits'] do |commit|
       json.message commit['message']
@@ -23,7 +26,7 @@ json.array! @events do |event|
   elsif event['type'] == 'CreateEvent'
     if event['payload']['ref_type'] == 'branch'
       json.branch event['payload']['ref']
-      json.url "https://github.com/#{event['repo']['name']}/tree/#{event['payload']['ref']}"
+      json.branchUrl "https://github.com/#{event['repo']['name']}/tree/#{event['payload']['ref']}"
     end
 
   elsif event['type'] == 'PullRequestEvent'

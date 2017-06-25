@@ -6,7 +6,7 @@ import Timestamp from './timestamp.jsx'
 
 class RedditComment extends React.Component {
   render() {
-    const { user, body, subreddit, time, url } = this.props
+    const { user, body, subreddit, time, url, score } = this.props
     return (
       <div className="box reddit-comment">
         <div className="media-content">
@@ -16,6 +16,12 @@ class RedditComment extends React.Component {
           <p className="reddit-meta clearfix">
             <SubredditLink subreddit={subreddit} />
             <RedditUserLink user={user} />
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              className="reddit-comment-score"
+              href={url}
+            >{score} {score === 1 ? 'point' : 'points'}</a>
             <a
               target="_blank"
               rel="noopener noreferrer"
@@ -31,6 +37,7 @@ class RedditComment extends React.Component {
 
 RedditComment.propTypes = {
   user: PropTypes.string,
+  score: PropTypes.number,
   body: PropTypes.string,
   subreddit: PropTypes.string,
   time: PropTypes.object,

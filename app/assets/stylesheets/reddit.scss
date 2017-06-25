@@ -40,11 +40,15 @@
   display: block;
 }
 
-.reddit-comments-link {
-  color: #888;
-  font-size: 14px;
+.reddit-score-and-comments {
   float: right;
   clear: right;
+  color: rgb(105, 120, 130);
+  font-size: 14px;
+}
+
+.reddit-comments-link {
+  color: rgb(105, 120, 130);
 }
 
 .comment-count {
@@ -61,4 +65,16 @@
 
 .reddit-self-text {
 
+}
+
+.reddit-comment-score {
+  float: right;
+  clear: right;
+  margin-top: 4px;
+  font-size: 14px;
+  color: rgb(105, 120, 130);
+}
+
+.reddit-link-score {
+  color: rgb(105, 120, 130);
 }

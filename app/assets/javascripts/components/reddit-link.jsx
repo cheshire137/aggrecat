@@ -8,7 +8,7 @@ class RedditLink extends React.Component {
   render() {
     const { user, url, subreddit, time, title,
             commentsURL, commentCount, nsfw,
-            isSelfPost, selfText } = this.props
+            isSelfPost, selfText, score } = this.props
     return (
       <div className="box reddit-link-container">
         <div className="media-content">
@@ -31,12 +31,23 @@ class RedditLink extends React.Component {
           <p className="reddit-meta clearfix">
             <SubredditLink subreddit={subreddit} />
             <RedditUserLink user={user} />
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              className="reddit-comments-link"
-              href={commentsURL}
-            >Comments (<span className="comment-count">{commentCount}</span>)</a>
+            <span
+              className="reddit-score-and-comments"
+            >
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                className="reddit-comments-link"
+                href={commentsURL}
+              >Comments (<span className="comment-count">{commentCount}</span>)</a>
+              <span> &middot; </span>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={commentsURL}
+                className="reddit-link-score"
+              >{score} {score === 1 ? 'point' : 'points'}</a>
+            </span>
             <a
               target="_blank"
               rel="noopener noreferrer"
@@ -60,7 +71,8 @@ RedditLink.propTypes = {
   commentCount: PropTypes.number,
   time: PropTypes.object,
   selfText: PropTypes.string,
-  isSelfPost: PropTypes.bool
+  isSelfPost: PropTypes.bool,
+  score: PropTypes.number
 }
 
 export default RedditLink

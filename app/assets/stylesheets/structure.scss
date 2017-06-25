@@ -23,6 +23,11 @@
   @include justify-content(center);
 }
 
+.activity-source-prefix {
+  margin-right: 1em;
+  display: inline-block;
+}
+
 .checkbox + .checkbox {
   margin-left: 1em;
 }

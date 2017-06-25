@@ -31,31 +31,27 @@ class ActivitySummary extends React.Component {
     const { enabledSources } = this.props
     const sources = this.getSources()
     return (
-      <div>
-        <p className="has-text-centered activity-summary">
-          Pulling activity from:
-        </p>
-        <form
-          className="activity-source-form"
-        >
-          {sources.map(source => (
-            <label
-              className="checkbox"
-              htmlFor={source}
-              key={source}
-            >
-              <input
-                type="checkbox"
-                id={source}
-                value={source}
-                checked={enabledSources.indexOf(source) > -1}
-                onChange={e => this.onToggleSource(e)}
-              />
-              {source}
-            </label>
-          ))}
-        </form>
-      </div>
+      <form
+        className="activity-source-form"
+      >
+        <span className="activity-source-prefix">Pulling activity from:</span>
+        {sources.map(source => (
+          <label
+            className="checkbox"
+            htmlFor={source}
+            key={source}
+          >
+            <input
+              type="checkbox"
+              id={source}
+              value={source}
+              checked={enabledSources.indexOf(source) > -1}
+              onChange={e => this.onToggleSource(e)}
+            />
+            {source}
+          </label>
+        ))}
+      </form>
     )
   }
 }

@@ -6,7 +6,8 @@ class AccountsForm extends React.Component {
     this.state = {
       twitterUser: props.twitterUser || '',
       redditUser: props.redditUser || '',
-      youtubeUser: props.youtubeUser || ''
+      youtubeUser: props.youtubeUser || '',
+      twitchUser: props.twitchUser || ''
     }
   }
 
@@ -14,24 +15,31 @@ class AccountsForm extends React.Component {
     this.setState({
       twitterUser: nextProps.twitterUser || '',
       redditUser: nextProps.redditUser || '',
-      youtubeUser: nextProps.youtubeUser || ''
+      youtubeUser: nextProps.youtubeUser || '',
+      twitchUser: nextProps.twitchUser || ''
     })
   }
 
   onSubmit(event) {
     event.preventDefault()
 
-    const { redditUser, twitterUser, youtubeUser } = this.state
+    const { redditUser, twitterUser, youtubeUser,
+            twitchUser } = this.state
 
     this.props.onUpdate({
       twitterUser: twitterUser.replace(/^@/, ''),
       redditUser,
-      youtubeUser
+      youtubeUser,
+      twitchUser
     })
   }
 
   onRedditUpdate(event) {
     this.setState({ redditUser: event.target.value })
+  }
+
+  onTwitchUpdate(event) {
+    this.setState({ twitchUser: event.target.value })
   }
 
   onTwitterUpdate(event) {
@@ -43,7 +51,8 @@ class AccountsForm extends React.Component {
   }
 
   render() {
-    const { redditUser, twitterUser, youtubeUser } = this.state
+    const { redditUser, twitterUser, youtubeUser,
+            twitchUser } = this.state
     return (
       <section className="section">
         <div className="container">
@@ -70,6 +79,28 @@ class AccountsForm extends React.Component {
                           id="reddit_user"
                           value={redditUser}
                           onChange={e => this.onRedditUpdate(e)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="field is-horizontal">
+                  <div className="field-label is-normal">
+                    <label
+                      htmlFor="twitch_user"
+                      className="label"
+                    >Twitch</label>
+                  </div>
+                  <div className="field-body">
+                    <div className="field">
+                      <div className="control">
+                        <input
+                          className="input"
+                          type="text"
+                          placeholder="Twitch channel"
+                          id="twitch_user"
+                          value={twitchUser}
+                          onChange={e => this.onTwitchUpdate(e)}
                         />
                       </div>
                     </div>
@@ -145,7 +176,8 @@ AccountsForm.propTypes = {
   redditUser: PropTypes.string,
   twitterUser: PropTypes.string,
   onUpdate: PropTypes.func.isRequired,
-  youtubeUser: PropTypes.string
+  youtubeUser: PropTypes.string,
+  twitchUser: PropTypes.string
 }
 
 export default AccountsForm

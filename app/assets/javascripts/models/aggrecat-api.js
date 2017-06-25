@@ -30,6 +30,14 @@ export default class AggrecatAPI extends Fetcher {
     )
   }
 
+  getTwitchStreamer(user) {
+    const path = `/twitch-streamer?user=${encodeURIComponent(user)}`
+    return this.get(path, this.defaultHeaders).then(data => {
+      data.videos = data.videos.map(vid => AggrecatAPI.setTime(vid))
+      return data
+    })
+  }
+
   getYoutubeVideos(user) {
     const path = `/youtube-videos?user=${encodeURIComponent(user)}`
     return this.get(path, this.defaultHeaders).then(videos =>

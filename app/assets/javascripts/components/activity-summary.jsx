@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 
 const ActivitySummary = function(props) {
-  const { redditUser, twitterUser, youtubeUser } = props
+  const { redditUser, twitterUser, youtubeUser, twitchUser } = props
   const sources = []
   if (redditUser) {
     sources.push('Reddit')
@@ -12,6 +12,10 @@ const ActivitySummary = function(props) {
   if (youtubeUser) {
     sources.push('YouTube')
   }
+  if (twitchUser) {
+    sources.push('Twitch')
+  }
+
   let sourceSentence = sources[0]
   if (sources.length === 2) {
     sourceSentence = `${sources[0]} and ${sources[1]}`
@@ -21,6 +25,7 @@ const ActivitySummary = function(props) {
     }
     sourceSentence += `, and ${sources[sources.length - 1]}`
   }
+
   return (
     <p className="has-text-centered activity-summary">
       Pulling activity from {sourceSentence}:
@@ -30,6 +35,7 @@ const ActivitySummary = function(props) {
 
 ActivitySummary.propTypes = {
   redditUser: PropTypes.string,
+  twitchUser: PropTypes.string,
   twitterUser: PropTypes.string,
   youtubeUser: PropTypes.string
 }

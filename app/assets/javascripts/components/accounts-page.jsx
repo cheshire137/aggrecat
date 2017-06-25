@@ -9,6 +9,7 @@ class AccountsPage extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      twitchUser: LocalStorage.get('twitch-user'),
       twitterUser: LocalStorage.get('twitter-user'),
       redditUser: LocalStorage.get('reddit-user'),
       youtubeUser: LocalStorage.get('youtube-user')
@@ -16,18 +17,20 @@ class AccountsPage extends React.Component {
   }
 
   onAccountsUpdate(accounts) {
+    LocalStorage.set('twitch-user', accounts.twitchUser)
     LocalStorage.set('twitter-user', accounts.twitterUser)
     LocalStorage.set('reddit-user', accounts.redditUser)
     LocalStorage.set('youtube-user', accounts.youtubeUser)
 
     if (accounts.twitterUser || accounts.redditUser ||
-        accounts.youtubeUser) {
+        accounts.youtubeUser || accounts.twitchUser) {
       this.props.router.push('/')
     }
   }
 
   render() {
-    const { redditUser, twitterUser, youtubeUser } = this.state
+    const { redditUser, twitterUser, youtubeUser,
+            twitchUser } = this.state
     return (
       <div>
         <Header title="Accounts" />
@@ -35,6 +38,7 @@ class AccountsPage extends React.Component {
           redditUser={redditUser}
           twitterUser={twitterUser}
           youtubeUser={youtubeUser}
+          twitchUser={twitchUser}
           onUpdate={accounts => this.onAccountsUpdate(accounts)}
         />
       </div>

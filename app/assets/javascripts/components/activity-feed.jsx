@@ -8,6 +8,7 @@ import LocalStorage from '../models/local-storage'
 import ActivitySummary from './activity-summary.jsx'
 import Header from './header.jsx'
 import RedditItem from './reddit-item.jsx'
+import TwitchVideo from './twitch-video.jsx'
 import YoutubeVideo from './youtube-video.jsx'
 
 class ActivityFeed extends React.Component {
@@ -16,6 +17,9 @@ class ActivityFeed extends React.Component {
     this.state = {
       allActivity: [],
       tweets: [],
+      twitchUser: LocalStorage.get('twitch-user'),
+      twitchVideos: [],
+      twitchChannel: null,
       twitterUser: LocalStorage.get('twitter-user'),
       redditActivity: [],
       redditUser: LocalStorage.get('reddit-user'),
@@ -26,7 +30,11 @@ class ActivityFeed extends React.Component {
   }
 
   componentDidMount() {
-    const { redditUser, twitterUser, youtubeUser } = this.state
+    const { redditUser, twitchUser, twitterUser,
+            youtubeUser } = this.state
+    if (twitchUser) {
+      this.fetchTwitchStreamer()
+    }
     if (twitterUser) {
       this.fetchTweets()
     }
@@ -53,6 +61,15 @@ class ActivityFeed extends React.Component {
     })
   }
 
+  onTwitchStreamerLoaded(data) {
+    this.setState({
+      twitchChannel: data.channel,
+      twitchVideos: data.videos
+    }, () => {
+      this.combineActivity()
+    })
+  }
+
   onYoutubeVideosLoaded(youtubeVideos) {
     this.setState({ youtubeVideos }, () => {
       this.combineActivity()
@@ -60,9 +77,10 @@ class ActivityFeed extends React.Component {
   }
 
   combineActivity() {
-    const { tweets, redditActivity, youtubeVideos } = this.state
+    const { tweets, redditActivity, twitchVideos,
+            youtubeVideos } = this.state
     const allActivity = tweets.concat(redditActivity).
-      concat(youtubeVideos)
+      concat(youtubeVideos).concat(twitchVideos)
     allActivity.sort((a, b) => {
       if (a.time < b.time) {
         return 1
@@ -78,6 +96,12 @@ class ActivityFeed extends React.Component {
       catch(err => console.error('failed to load Reddit activity', err))
   }
 
+  fetchTwitchStreamer() {
+    this.api.getTwitchStreamer(this.state.twitchUser).
+      then(data => this.onTwitchStreamerLoaded(data)).
+      catch(err => console.error('failed to load Twitch streamer', err))
+  }
+
   fetchTweets() {
     this.api.getTweets(this.state.twitterUser).
       then(tweets => this.onTweetsLoaded(tweets)).
@@ -91,7 +115,8 @@ class ActivityFeed extends React.Component {
   }
 
   render() {
-    const { allActivity, redditUser, twitterUser, youtubeUser } = this.state
+    const { allActivity, redditUser, twitterUser, twitchUser,
+            youtubeUser, twitchChannel } = this.state
     return (
       <div>
         <Header title="Activity" />
@@ -103,6 +128,7 @@ class ActivityFeed extends React.Component {
                   redditUser={redditUser}
                   twitterUser={twitterUser}
                   youtubeUser={youtubeUser}
+                  twitchUser={twitchUser}
                 />
                 <ul className="activity-list">
                   {allActivity.map(item => {
@@ -124,6 +150,16 @@ class ActivityFeed extends React.Component {
                       return (
                         <li className="youtube-container" key={item.id}>
                           <YoutubeVideo {...item} />
+                        </li>
+                      )
+                    }
+                    if (item.source === 'twitch') {
+                      return (
+                        <li className="twitch-container" key={item.id}>
+                          <TwitchVideo
+                            channel={twitchChannel}
+                            {...item}
+                          />
                         </li>
                       )
                     }

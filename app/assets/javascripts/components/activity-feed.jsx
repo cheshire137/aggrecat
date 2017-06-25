@@ -38,41 +38,20 @@ class ActivityFeed extends React.Component {
     const { redditUser, twitchUser, twitterUser,
             youtubeUser, githubUser } = this.state
 
-    if (twitchUser) {
-      this.fetchTwitchStreamer()
-    }
+    this.fetchAndCombineActivity()
 
-    if (twitterUser) {
-      this.fetchTweets()
-    }
-
-    if (redditUser) {
-      this.fetchRedditActivity()
-    }
-
-    if (youtubeUser) {
-      this.fetchYoutubeVideos()
-    }
-
-    if (githubUser) {
-      this.fetchGithubEvents()
-    }
-
-    if (!twitterUser && !redditUser && !youtubeUser && !githubUser) {
+    if (!twitterUser && !redditUser && !youtubeUser && !githubUser &&
+        !twitchUser) {
       this.props.router.push('/accounts')
     }
   }
 
   onGithubEventsLoaded(githubEvents) {
-    this.setState({ githubEvents }, () => {
-      this.combineActivity()
-    })
+    this.setState({ githubEvents })
   }
 
   onRedditActivityLoaded(redditActivity) {
-    this.setState({ redditActivity }, () => {
-      this.combineActivity()
-    })
+    this.setState({ redditActivity })
   }
 
   onToggleSource(source, enabled) {
@@ -87,29 +66,23 @@ class ActivityFeed extends React.Component {
 
     this.setState({ enabledSources: sources }, () => {
       LocalStorage.set('enabled-sources', sources)
-      this.combineActivity()
+      this.fetchAndCombineActivity()
     })
   }
 
   onTweetsLoaded(tweets) {
-    this.setState({ tweets }, () => {
-      this.combineActivity()
-    })
+    this.setState({ tweets })
   }
 
   onTwitchStreamerLoaded(data) {
     this.setState({
       twitchChannel: data.channel,
       twitchVideos: data.videos
-    }, () => {
-      this.combineActivity()
     })
   }
 
   onYoutubeVideosLoaded(youtubeVideos) {
-    this.setState({ youtubeVideos }, () => {
-      this.combineActivity()
-    })
+    this.setState({ youtubeVideos })
   }
 
   combineActivity() {
@@ -144,32 +117,64 @@ class ActivityFeed extends React.Component {
     this.setState({ allActivity })
   }
 
+  fetchAndCombineActivity() {
+    this.fetchActivity().then(() => this.combineActivity())
+  }
+
+  fetchActivity() {
+    const { redditUser, twitchUser, twitterUser,
+            youtubeUser, githubUser, enabledSources } = this.state
+    const promises = []
+
+    if (twitchUser && enabledSources.indexOf('Twitch') > -1) {
+      promises.push(this.fetchTwitchStreamer())
+    }
+
+    if (twitterUser && enabledSources.indexOf('Twitter') > -1) {
+      promises.push(this.fetchTweets())
+    }
+
+    if (redditUser && enabledSources.indexOf('Reddit') > -1) {
+      promises.push(this.fetchRedditActivity())
+    }
+
+    if (youtubeUser && enabledSources.indexOf('YouTube') > -1) {
+      promises.push(this.fetchYoutubeVideos())
+    }
+
+    if (githubUser && enabledSources.indexOf('GitHub') > -1) {
+      promises.push(this.fetchGithubEvents())
+    }
+
+    return Promise.all(promises)
+  }
+
   fetchGithubEvents() {
-    this.api.getGithubEvents(this.state.githubUser).
+    return this.api.getGithubEvents(this.state.githubUser).
       then(events => this.onGithubEventsLoaded(events)).
       catch(err => console.error('failed to load GitHub events', err))
   }
 
   fetchRedditActivity() {
-    this.api.getRedditActivity(this.state.redditUser).
+    return this.api.getRedditActivity(this.state.redditUser).
       then(activity => this.onRedditActivityLoaded(activity)).
       catch(err => console.error('failed to load Reddit activity', err))
   }
 
   fetchTwitchStreamer() {
-    this.api.getTwitchStreamer(this.state.twitchUser).
+    return this.api.getTwitchStreamer(this.state.twitchUser).
       then(data => this.onTwitchStreamerLoaded(data)).
       catch(err => console.error('failed to load Twitch streamer', err))
   }
 
   fetchTweets() {
-    this.api.getTweets(this.state.twitterUser).
+    return this.api.getTweets(this.state.twitterUser).
       then(tweets => this.onTweetsLoaded(tweets)).
       catch(err => console.error('failed to load Tweets', err))
   }
 
   fetchYoutubeVideos() {
-    this.api.getYoutubeVideos(this.state.youtubeUser).
+    return this.api.getYoutubeVideos(this.state.youtubeUser).
       then(videos => this.onYoutubeVideosLoaded(videos)).
       catch(err => console.error('failed to load YouTube videos', err))
   }

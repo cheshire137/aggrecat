@@ -7,7 +7,8 @@ class AccountsForm extends React.Component {
       twitterUser: props.twitterUser || '',
       redditUser: props.redditUser || '',
       youtubeUser: props.youtubeUser || '',
-      twitchUser: props.twitchUser || ''
+      twitchUser: props.twitchUser || '',
+      githubUser: props.githubUser || ''
     }
   }
 
@@ -16,7 +17,8 @@ class AccountsForm extends React.Component {
       twitterUser: nextProps.twitterUser || '',
       redditUser: nextProps.redditUser || '',
       youtubeUser: nextProps.youtubeUser || '',
-      twitchUser: nextProps.twitchUser || ''
+      twitchUser: nextProps.twitchUser || '',
+      githubUser: nextProps.githubUser || ''
     })
   }
 
@@ -24,14 +26,19 @@ class AccountsForm extends React.Component {
     event.preventDefault()
 
     const { redditUser, twitterUser, youtubeUser,
-            twitchUser } = this.state
+            twitchUser, githubUser } = this.state
 
     this.props.onUpdate({
       twitterUser: twitterUser.replace(/^@/, ''),
       redditUser,
       youtubeUser,
-      twitchUser
+      twitchUser,
+      githubUser
     })
+  }
+
+  onGithubUpdate(event) {
+    this.setState({ githubUser: event.target.value })
   }
 
   onRedditUpdate(event) {
@@ -52,7 +59,8 @@ class AccountsForm extends React.Component {
 
   render() {
     const { redditUser, twitterUser, youtubeUser,
-            twitchUser } = this.state
+            twitchUser, githubUser } = this.state
+
     return (
       <section className="section">
         <div className="container">
@@ -62,6 +70,28 @@ class AccountsForm extends React.Component {
                 <p className="has-text-centered">
                   Enter user names to build an activity feed:
                 </p>
+                <div className="field is-horizontal">
+                  <div className="field-label is-normal">
+                    <label
+                      htmlFor="github_user"
+                      className="label"
+                    >GitHub</label>
+                  </div>
+                  <div className="field-body">
+                    <div className="field">
+                      <div className="control">
+                        <input
+                          className="input"
+                          type="text"
+                          placeholder="GitHub user"
+                          id="github_user"
+                          value={githubUser}
+                          onChange={e => this.onGithubUpdate(e)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div className="field is-horizontal">
                   <div className="field-label is-normal">
                     <label
@@ -177,7 +207,8 @@ AccountsForm.propTypes = {
   twitterUser: PropTypes.string,
   onUpdate: PropTypes.func.isRequired,
   youtubeUser: PropTypes.string,
-  twitchUser: PropTypes.string
+  twitchUser: PropTypes.string,
+  githubUser: PropTypes.string
 }
 
 export default AccountsForm

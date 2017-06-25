@@ -1,12 +1,22 @@
 import PropTypes from 'prop-types'
 
 class ActivitySummary extends React.Component {
+  onToggleSource(event) {
+    const checkbox = event.target
+    const source = checkbox.value
+    this.props.onToggleSource(source, checkbox.checked)
+  }
+
   getSources() {
-    const { redditUser, twitterUser, youtubeUser, twitchUser } = this.props
+    const { redditUser, twitterUser, youtubeUser, twitchUser,
+            githubUser } = this.props
     const sources = []
 
     if (redditUser) {
       sources.push('Reddit')
+    }
+    if (githubUser) {
+      sources.push('GitHub')
     }
     if (twitterUser) {
       sources.push('Twitter')
@@ -19,12 +29,6 @@ class ActivitySummary extends React.Component {
     }
 
     return sources
-  }
-
-  onToggleSource(event) {
-    const checkbox = event.target
-    const source = checkbox.value
-    this.props.onToggleSource(source, checkbox.checked)
   }
 
   render() {
@@ -62,7 +66,8 @@ ActivitySummary.propTypes = {
   twitterUser: PropTypes.string,
   youtubeUser: PropTypes.string,
   onToggleSource: PropTypes.func.isRequired,
-  enabledSources: PropTypes.array.isRequired
+  enabledSources: PropTypes.array.isRequired,
+  githubUser: PropTypes.string
 }
 
 export default ActivitySummary

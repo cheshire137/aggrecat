@@ -6,6 +6,7 @@ import AggrecatAPI from '../models/aggrecat-api'
 import LocalStorage from '../models/local-storage'
 
 import ActivitySummary from './activity-summary.jsx'
+import GithubEvent from './github-event.jsx'
 import Header from './header.jsx'
 import RedditItem from './reddit-item.jsx'
 import TwitchVideo from './twitch-video.jsx'
@@ -25,30 +26,47 @@ class ActivityFeed extends React.Component {
       redditUser: LocalStorage.get('reddit-user'),
       youtubeUser: LocalStorage.get('youtube-user'),
       youtubeVideos: [],
+      githubEvents: [],
+      githubUser: LocalStorage.get('github-user'),
       enabledSources: LocalStorage.get('enabled-sources') ||
-        ['Twitch', 'Reddit', 'YouTube', 'Twitter']
+        ['Twitch', 'Reddit', 'YouTube', 'Twitter', 'GitHub']
     }
     this.api = new AggrecatAPI()
   }
 
   componentDidMount() {
     const { redditUser, twitchUser, twitterUser,
-            youtubeUser } = this.state
+            youtubeUser, githubUser } = this.state
+
     if (twitchUser) {
       this.fetchTwitchStreamer()
     }
+
     if (twitterUser) {
       this.fetchTweets()
     }
+
     if (redditUser) {
       this.fetchRedditActivity()
     }
+
     if (youtubeUser) {
       this.fetchYoutubeVideos()
     }
-    if (!twitterUser && !redditUser && !youtubeUser) {
+
+    if (githubUser) {
+      this.fetchGithubEvents()
+    }
+
+    if (!twitterUser && !redditUser && !youtubeUser && !githubUser) {
       this.props.router.push('/accounts')
     }
+  }
+
+  onGithubEventsLoaded(githubEvents) {
+    this.setState({ githubEvents }, () => {
+      this.combineActivity()
+    })
   }
 
   onRedditActivityLoaded(redditActivity) {
@@ -60,11 +78,13 @@ class ActivityFeed extends React.Component {
   onToggleSource(source, enabled) {
     const sources = this.state.enabledSources.slice(0)
     const index = sources.indexOf(source)
+
     if (enabled && index < 0) {
       sources.push(source)
     } else if (!enabled && index > -1) {
       delete sources[index]
     }
+
     this.setState({ enabledSources: sources }, () => {
       LocalStorage.set('enabled-sources', sources)
       this.combineActivity()
@@ -94,10 +114,15 @@ class ActivityFeed extends React.Component {
 
   combineActivity() {
     const { tweets, redditActivity, twitchVideos,
-            youtubeVideos, enabledSources } = this.state
+            youtubeVideos, enabledSources,
+            githubEvents } = this.state
     let allActivity = []
+
     if (enabledSources.indexOf('YouTube') > -1) {
       allActivity = allActivity.concat(youtubeVideos)
+    }
+    if (enabledSources.indexOf('GitHub') > -1) {
+      allActivity = allActivity.concat(githubEvents)
     }
     if (enabledSources.indexOf('Reddit') > -1) {
       allActivity = allActivity.concat(redditActivity)
@@ -108,13 +133,21 @@ class ActivityFeed extends React.Component {
     if (enabledSources.indexOf('Twitch') > -1) {
       allActivity = allActivity.concat(twitchVideos)
     }
+
     allActivity.sort((a, b) => {
       if (a.time < b.time) {
         return 1
       }
       return a.time > b.time ? -1 : 0
     })
+
     this.setState({ allActivity })
+  }
+
+  fetchGithubEvents() {
+    this.api.getGithubEvents(this.state.githubUser).
+      then(events => this.onGithubEventsLoaded(events)).
+      catch(err => console.error('failed to load GitHub events', err))
   }
 
   fetchRedditActivity() {
@@ -143,7 +176,8 @@ class ActivityFeed extends React.Component {
 
   render() {
     const { allActivity, redditUser, twitterUser, twitchUser,
-            youtubeUser, twitchChannel, enabledSources } = this.state
+            youtubeUser, twitchChannel, enabledSources,
+            githubUser } = this.state
     return (
       <div>
         <Header title="Activity" />
@@ -155,6 +189,7 @@ class ActivityFeed extends React.Component {
                   redditUser={redditUser}
                   twitterUser={twitterUser}
                   youtubeUser={youtubeUser}
+                  githubUser={githubUser}
                   twitchUser={twitchUser}
                   enabledSources={enabledSources}
                   onToggleSource={(s, e) => this.onToggleSource(s, e)}
@@ -168,6 +203,7 @@ class ActivityFeed extends React.Component {
                         </li>
                       )
                     }
+
                     if (item.source === 'reddit') {
                       return (
                         <li className="reddit-container" key={item.id}>
@@ -175,6 +211,7 @@ class ActivityFeed extends React.Component {
                         </li>
                       )
                     }
+
                     if (item.source === 'youtube') {
                       return (
                         <li className="youtube-container" key={item.id}>
@@ -182,6 +219,7 @@ class ActivityFeed extends React.Component {
                         </li>
                       )
                     }
+
                     if (item.source === 'twitch') {
                       return (
                         <li className="twitch-container" key={item.id}>
@@ -192,6 +230,15 @@ class ActivityFeed extends React.Component {
                         </li>
                       )
                     }
+
+                    if (item.source === 'github') {
+                      return (
+                        <li className="github-container" key={item.id}>
+                          <GithubEvent item={item} />
+                        </li>
+                      )
+                    }
+
                     return <li key={item.type}>{item.type}</li>
                   })}
                 </ul>

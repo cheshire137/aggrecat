@@ -25,7 +25,8 @@ class ActivityFeed extends React.Component {
       redditUser: LocalStorage.get('reddit-user'),
       youtubeUser: LocalStorage.get('youtube-user'),
       youtubeVideos: [],
-      enabledSources: ['Twitch', 'Reddit', 'YouTube', 'Twitter']
+      enabledSources: LocalStorage.get('enabled-sources') ||
+        ['Twitch', 'Reddit', 'YouTube', 'Twitter']
     }
     this.api = new AggrecatAPI()
   }
@@ -65,6 +66,7 @@ class ActivityFeed extends React.Component {
       delete sources[index]
     }
     this.setState({ enabledSources: sources }, () => {
+      LocalStorage.set('enabled-sources', sources)
       this.combineActivity()
     })
   }

@@ -17,6 +17,8 @@ class RedditComment extends React.Component {
             <SubredditLink subreddit={subreddit} />
             <RedditUserLink user={user} />
             <a
+              target="_blank"
+              rel="noopener noreferrer"
               className="reddit-permalink"
               href={url}
             ><Timestamp time={time} /></a>

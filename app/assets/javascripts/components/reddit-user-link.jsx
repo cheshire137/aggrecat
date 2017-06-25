@@ -5,7 +5,12 @@ class RedditUserLink extends React.Component {
     const { user } = this.props
     const url = `https://reddit.com/u/${encodeURIComponent(user)}`
     return (
-      <a href={url} className="reddit-user">/u/{user}</a>
+      <a
+        href={url}
+        className="reddit-user"
+        target="_blank"
+        rel="noopener noreferrer"
+      >/u/{user}</a>
     )
   }
 }

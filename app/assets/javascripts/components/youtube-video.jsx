@@ -25,6 +25,8 @@ class YoutubeVideo extends React.Component {
           <a
             title={title}
             href={url}
+            target="_blank"
+            rel="noopener noreferrer"
           ><Timestamp time={time} /></a>
         </div>
       </div>

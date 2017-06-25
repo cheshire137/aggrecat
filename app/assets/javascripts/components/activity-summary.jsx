@@ -24,7 +24,6 @@ class ActivitySummary extends React.Component {
   onToggleSource(event) {
     const checkbox = event.target
     const source = checkbox.value
-    console.log(source, checkbox.checked)
     this.props.onToggleSource(source, checkbox.checked)
   }
 

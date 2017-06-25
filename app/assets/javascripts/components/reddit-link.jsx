@@ -16,7 +16,12 @@ class RedditLink extends React.Component {
             {nsfw ? (
               <acronym title="Not Safe for Work" className="nsfw-label">NSFW</acronym>
             ) : ''}
-            <a className="reddit-link" href={url}>{title}</a>
+            <a
+              className="reddit-link"
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >{title}</a>
             {isSelfPost ? (
               <div
                 className="reddit-self-text"
@@ -27,10 +32,14 @@ class RedditLink extends React.Component {
             <SubredditLink subreddit={subreddit} />
             <RedditUserLink user={user} />
             <a
+              target="_blank"
+              rel="noopener noreferrer"
               className="reddit-comments-link"
               href={commentsURL}
             >Comments (<span className="comment-count">{commentCount}</span>)</a>
             <a
+              target="_blank"
+              rel="noopener noreferrer"
               href={commentsURL}
               className="reddit-permalink"
             ><Timestamp time={time} /></a>

@@ -5,7 +5,12 @@ class SubredditLink extends React.Component {
     const { subreddit } = this.props
     const url = `https://reddit.com/r/${encodeURIComponent(subreddit)}`
     return (
-      <a href={url} className="subreddit">/r/{subreddit}</a>
+      <a
+        href={url}
+        className="subreddit"
+        target="_blank"
+        rel="noopener noreferrer"
+      >/r/{subreddit}</a>
     )
   }
 }

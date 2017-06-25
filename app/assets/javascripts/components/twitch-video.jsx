@@ -5,7 +5,7 @@ import Timestamp from './timestamp.jsx'
 class TwitchVideo extends React.Component {
   render() {
     const { channel, title, description, url, image, views,
-            time, id } = this.props
+            time } = this.props
     return (
       <div className="box twitch-video">
         <div className="media-content">
@@ -14,19 +14,25 @@ class TwitchVideo extends React.Component {
               <span
                 className="twitch-view-count"
               >{views} {views === 1 ? 'view' : 'views'}</span>
-              <strong className="twitch-video-title">
-                {title}
-              </strong>
+              <a
+                className="twitch-video-title"
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >{title}</a>
             </p>
-            <iframe
-              src={`http://player.twitch.tv/?video=${id}&autoplay=false`}
-              width="560"
-              height="315"
-              frameBorder="0"
-              scrolling="no"
-              className="twitch-video"
-              allowFullScreen
-            />
+            <p className="has-text-centered">
+              <a
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+              ><img
+                src={image}
+                width="320"
+                height="180"
+                alt={title}
+              /></a>
+            </p>
             {description && description.length > 0 ? (
               <p
                 className="twitch-description"
@@ -36,9 +42,13 @@ class TwitchVideo extends React.Component {
               <a
                 className="twitch-permalink"
                 href={url}
+                target="_blank"
+                rel="noopener noreferrer"
               ><Timestamp time={time} /></a>
               <a
                 href={channel.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="twitch-channel-name"
               >{channel.name}</a>
             </p>

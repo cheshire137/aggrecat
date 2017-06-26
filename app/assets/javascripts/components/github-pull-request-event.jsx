@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types'
+import ReactMarkdown from 'react-markdown'
 
 import Timestamp from './timestamp.jsx'
 
@@ -33,7 +34,9 @@ const GithubPullRequestEvent = function(props) {
           >{repo}</a>
         </p>
         {body && body.length > 0 ? (
-          <blockquote className="github-pr-body">{body}</blockquote>
+          <blockquote
+            className="github-pr-body"
+          ><ReactMarkdown source={body} escapeHtml /></blockquote>
         ) : ''}
         <Timestamp time={time} />
       </div>

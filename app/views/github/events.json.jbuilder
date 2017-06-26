@@ -37,6 +37,7 @@ json.array! @events do |event|
 
   elsif event['type'] == 'ForkEvent'
     json.url event['payload']['forkee']['html_url']
+    json.fork event['payload']['forkee']['full_name']
 
   elsif event['type'] == 'WatchEvent'
     json.action event['payload']['action']

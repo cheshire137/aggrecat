@@ -16,11 +16,11 @@ const Header = function(props) {
             href="/"
           >&gt;^..^&lt; Aggrecat</a>
           <a
-            href="/"
+            href="/user"
             className={`nav-item ${title === 'Activity' ? 'is-active' : ''}`}
           >Activity</a>
           <a
-            href="/accounts"
+            href="/user/accounts"
             className={`nav-item ${title === 'Accounts' ? 'is-active' : ''}`}
           >Accounts</a>
         </div>

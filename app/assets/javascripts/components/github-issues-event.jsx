@@ -3,9 +3,9 @@ import ReactMarkdown from 'react-markdown'
 
 import Timestamp from './timestamp.jsx'
 
-const GithubPullRequestEvent = function(props) {
+const GithubIssuesEvent = function(props) {
   const { repo, repoUrl, time, login, userUrl, title,
-          pullRequestUrl, body, action } = props
+          url, action } = props
 
   return (
     <div className="card">
@@ -18,9 +18,9 @@ const GithubPullRequestEvent = function(props) {
             rel="noopener noreferrer"
           >{login}</a>
           <span> {action} </span>
-          <span>pull request &ldquo;</span>
+          <span>issue &ldquo;</span>
           <a
-            href={pullRequestUrl}
+            href={url}
             target="_blank"
             rel="noopener noreferrer"
             className="github-branch-link"
@@ -33,27 +33,21 @@ const GithubPullRequestEvent = function(props) {
             className="github-repo-link"
           >{repo}</a>
         </p>
-        {body && body.length > 0 ? (
-          <blockquote
-            className="github-pr-body"
-          ><ReactMarkdown source={body} escapeHtml /></blockquote>
-        ) : ''}
         <Timestamp time={time} />
       </div>
     </div>
   )
 }
 
-GithubPullRequestEvent.propTypes = {
+GithubIssuesEvent.propTypes = {
   repo: PropTypes.string,
   repoUrl: PropTypes.string,
   time: PropTypes.object,
   login: PropTypes.string,
   userUrl: PropTypes.string,
   title: PropTypes.string,
-  pullRequestUrl: PropTypes.string,
-  body: PropTypes.string,
+  url: PropTypes.string,
   action: PropTypes.string
 }
 
-export default GithubPullRequestEvent
+export default GithubIssuesEvent

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  devise_for :users
+
   scope defaults: { format: :json }, path: "/api" do
     get '/github-events' => 'github#events', as: :github_events
     get '/tweets' => 'twitter#tweets', as: :tweets

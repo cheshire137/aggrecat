@@ -12,10 +12,14 @@
   </head>
   <body>
     <% if alert.present? %>
-      <p class="alert"><%= alert %></p>
+      <div class="container has-text-center">
+        <div class="notification is-warning"><%= alert %></div>
+      </div>
     <% end %>
     <% if notice.present? %>
-      <p class="notice"><%= notice %></p>
+      <div class="container has-text-center">
+        <div class="notification is-success"><%= notice %></div>
+      </div>
     <% end %>
     <%= yield %>
     <%= javascript_include_tag 'application' %>

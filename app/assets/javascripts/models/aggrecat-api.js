@@ -45,6 +45,11 @@ export default class AggrecatAPI extends Fetcher {
     })
   }
 
+  getUser() {
+    return this.get('/user', this.defaultHeaders).
+      then(json => json.user)
+  }
+
   getYoutubeVideos(user) {
     const path = `/youtube-videos?user=${encodeURIComponent(user)}`
     return this.get(path, this.defaultHeaders).then(videos =>

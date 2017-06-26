@@ -30,9 +30,10 @@ json.array! @events do |event|
     end
 
   elsif event['type'] == 'PullRequestEvent'
-    json.url event['payload']['pull_request']['html_url']
+    json.pullRequestUrl event['payload']['pull_request']['html_url']
     json.title event['payload']['pull_request']['title']
     json.body event['payload']['pull_request']['body']
+    json.action event['payload']['action']
 
   elsif event['type'] == 'ForkEvent'
     json.url event['payload']['forkee']['html_url']

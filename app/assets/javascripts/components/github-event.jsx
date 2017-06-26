@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types'
 
 import GithubCreateEvent from './github-create-event.jsx'
+import GithubPullRequestEvent from './github-pull-request-event.jsx'
 import GithubPushEvent from './github-push-event.jsx'
 import GithubWatchEvent from './github-watch-event.jsx'
 
@@ -17,6 +18,10 @@ const GithubEvent = function(props) {
 
   if (item.type === 'CreateEvent') {
     return <GithubCreateEvent {...item} />
+  }
+
+  if (item.type === 'PullRequestEvent') {
+    return <GithubPullRequestEvent {...item} />
   }
 
   return <p>{item.type}</p>

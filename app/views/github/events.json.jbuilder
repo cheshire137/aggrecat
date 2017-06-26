@@ -44,6 +44,7 @@ json.array! @events do |event|
   elsif event['type'] == 'IssueCommentEvent'
     json.url event['payload']['issue']['html_url']
     json.title event['payload']['issue']['title']
+    json.body event['payload']['comment']['body']
 
   elsif event['type'] == 'IssuesEvent'
     json.action event['payload']['action']
